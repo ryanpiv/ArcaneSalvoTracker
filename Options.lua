@@ -1,4 +1,4 @@
-local ADDON, ns = ...
+local _, ns = ...
 
 --------------------------------------------------------------------
 -- Arcane Salvo Tracker — Options
@@ -149,18 +149,7 @@ local function ShowColorPicker(get, set)
             end
         end,
     }
-    if ColorPickerFrame.SetupColorPickerAndShow then
-        ColorPickerFrame:SetupColorPickerAndShow(info)
-    else
-        -- Legacy path for older clients
-        ColorPickerFrame.func = OnChange
-        ColorPickerFrame.opacityFunc = OnChange
-        ColorPickerFrame.cancelFunc = info.cancelFunc
-        ColorPickerFrame.hasOpacity = true
-        ColorPickerFrame.opacity = a
-        ColorPickerFrame:SetColorRGB(r, g, b)
-        ColorPickerFrame:Show()
-    end
+    ColorPickerFrame:SetupColorPickerAndShow(info)
 end
 
 local function MakeSwatch(label, colorKey, needsRebuild)
@@ -234,6 +223,9 @@ local function BuildFontPicker(anchorBtn)
     scroll:SetScrollChild(child)
     fontPicker.child = child
     fontPicker.rows = {}
+    -- Frames spawn shown; start hidden so the first click populates
+    -- and shows instead of falling into the toggle-off branch.
+    fontPicker:Hide()
 end
 
 local function PopulateFontPicker()
@@ -292,6 +284,9 @@ local function Build()
         tile = true, tileSize = 32, edgeSize = 16,
         insets = { left = 4, right = 4, top = 4, bottom = 4 },
     })
+    -- Frames spawn shown; hide now (before OnShow/OnHide are set) so the
+    -- first Show() actually fires OnShow and activates the preview.
+    frame:Hide()
     tinsert(UISpecialFrames, "ArcaneSalvoTrackerOptionsFrame")
 
     local title = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
@@ -316,7 +311,8 @@ local function Build()
     local note = scrollChild:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     note:SetWidth(CONTENT_W)
     note:SetJustifyH("LEFT")
-    note:SetText("While this window is open, the bar shows a simulated stack count. The real bar only fills while the Arcane Salvo buff is active.")
+    note:SetText("While this window is open, the bar shows a simulated stack count."
+        .. " The real bar only fills while the Arcane Salvo buff is active.")
     Place(note, 30, 8)
 
     ns.previewSetting = ns.previewSetting or 0

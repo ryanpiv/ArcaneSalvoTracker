@@ -5,3 +5,7 @@ ignore:
   - README.md
   - .pkgmeta
   - .gitignore
+  - .luacheckrc
+  - .busted
+  - spec
+  - .github

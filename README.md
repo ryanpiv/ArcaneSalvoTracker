@@ -1,5 +1,7 @@
 # Arcane Salvo Tracker
 
+[![CI](https://github.com/ryanpiv/ArcaneSalvoTracker/actions/workflows/ci.yml/badge.svg)](https://github.com/ryanpiv/ArcaneSalvoTracker/actions/workflows/ci.yml)
+
 A clean, highly configurable **Arcane Salvo** stack bar for Arcane Mages (WoW retail, 12.x
 "Midnight"). One bar, no clutter:
 
@@ -51,7 +53,9 @@ combat and applied automatically when combat ends.
 `World of Warcraft/_retail_/Interface/AddOns/ArcaneSalvoTracker` so that
 `ArcaneSalvoTracker.toc` sits directly inside it.
 
-**Development (macOS):**
+## Development
+
+Symlink the repo into the AddOns folder for live testing (macOS):
 
 ```bash
 ln -s ~/Documents/Git/ArcaneSalvoTracker \
@@ -59,6 +63,26 @@ ln -s ~/Documents/Git/ArcaneSalvoTracker \
 ```
 
 Then `/reload` in game to pick up changes.
+
+**Lint and tests** (CI runs both on every push; tests run on Lua 5.1, the
+version WoW embeds):
+
+```bash
+luarocks install busted && luarocks install luacheck
+
+luacheck .
+busted
+```
+
+The suite in `spec/` runs the addon against a mock of the WoW client API
+(`spec/wow_mock.lua`) covering frames, events, timers, the AuraContainer
+slot/color-map handshake, and the ColorPickerFrame — including client
+semantics like frames spawning shown and OnShow firing only on transitions.
+
+**Releases:** pushing a `v*` tag triggers the BigWigsMods packager workflow,
+which builds the zip per `.pkgmeta` and attaches it to a GitHub release. Add
+`CF_API_KEY` / `WAGO_API_KEY` repository secrets to also publish to
+CurseForge / Wago.
 
 ## Known limitations
 
