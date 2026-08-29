@@ -80,9 +80,9 @@ slot/color-map handshake, and the ColorPickerFrame — including client
 semantics like frames spawning shown and OnShow firing only on transitions.
 
 **Releases:** pushing a `v*` tag triggers the BigWigsMods packager workflow,
-which builds the zip per `.pkgmeta` and attaches it to a GitHub release. Add
-`CF_API_KEY` / `WAGO_API_KEY` repository secrets to also publish to
-CurseForge / Wago.
+which builds the zip per `.pkgmeta`, attaches it to a GitHub release, and
+uploads to CurseForge. See [PUBLISHING.md](PUBLISHING.md) for the one-time
+CurseForge setup and the release checklist.
 
 ## Known limitations
 

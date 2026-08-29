@@ -1,8 +1,13 @@
 package-as: ArcaneSalvoTracker
 enable-nolib-creation: no
 
+manual-changelog:
+  filename: CHANGELOG.md
+  markup-type: markdown
+
 ignore:
   - README.md
+  - PUBLISHING.md
   - .pkgmeta
   - .gitignore
   - .luacheckrc
