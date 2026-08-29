@@ -16,20 +16,23 @@ describe("Bar", function()
     end)
 
     describe("aura container", function()
-        it("builds a slot filtered to the candidate spell IDs", function()
+        it("builds a slot filtered to the primary candidate (single-ID filter)", function()
             assert.equal(1, w.slotAdds)
             assert.equal("HELPFUL|PLAYER", w.lastSlotFilter)
             local include = w.lastSlotOpts.candidateFilters.includeSpellIDs
-            assert.is_true(include[384452])
-            assert.is_true(include[384455])
+            -- 1242974 is the live 12.1 Arcane Salvo ID
+            assert.is_true(include[1242974])
+            local count = 0
+            for _ in pairs(include) do count = count + 1 end
+            assert.equal(1, count)
         end)
 
-        it("narrows the filter once a spell ID is resolved", function()
+        it("switches the filter to the resolved spell ID", function()
             ns.db.spellID = 384452
             ns.BuildContainer()
             local include = w.lastSlotOpts.candidateFilters.includeSpellIDs
             assert.is_true(include[384452])
-            assert.is_nil(include[384455])
+            assert.is_nil(include[1242974])
         end)
 
         it("anchors the stack count FontString centered inside the bar", function()

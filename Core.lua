@@ -12,10 +12,12 @@ local ADDON, ns = ...
 
 ns.ADDON = ADDON
 
--- Known Arcane Salvo aura spell IDs; may drift between patches, so
--- Bar.lua feeds all of them to the container until one is confirmed,
--- and Resolve() below locks one in when the aura is readable.
-ns.SALVO_CANDIDATES = { 384452, 384455 }
+-- Arcane Salvo aura spell ID candidates, most likely first. 1242974 is
+-- the live 12.1 ID (verified via the resolved SavedVariables of the
+-- original ArcaneSalvoBar on a live client); the older Harmony-era IDs
+-- are kept as resolution fallbacks. The container filters on the first
+-- candidate until Resolve() locks in a confirmed ID.
+ns.SALVO_CANDIDATES = { 1242974, 384452, 384455 }
 ns.SALVO_NAME = "arcane salvo"
 ns.ARCANE_SPEC_ID = 62
 

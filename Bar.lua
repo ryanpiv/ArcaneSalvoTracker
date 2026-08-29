@@ -219,12 +219,10 @@ function ns.BuildContainer()
         log("AuraContainer SetUnit failed")
     end
 
-    local include = {}
-    if db.spellID then
-        include[db.spellID] = true
-    else
-        for _, id in ipairs(ns.SALVO_CANDIDATES) do include[id] = true end
-    end
+    -- A single-ID filter is the only form confirmed to work against the
+    -- live client; multi-ID tables are unverified. Resolve() corrects
+    -- db.spellID if the primary candidate is ever wrong.
+    local include = { [db.spellID or ns.SALVO_CANDIDATES[1]] = true }
 
     local okAdd, slot = pcall(container.AddAuraSlot, container, "salvo", "HELPFUL|PLAYER", {
         candidateFilters = { includeSpellIDs = include },
