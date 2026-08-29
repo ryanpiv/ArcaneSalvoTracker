@@ -160,6 +160,9 @@ local function createFrame(w, frameType, name, parent)
             w.lastSlotFilter = filter
             w.lastSlotOpts = opts
             local slot = newObject(w, "AuraSlot", self, nil)
+            -- Real aura slot buttons take mouse input by default
+            slot.state.mouseEnabled = true
+            w.lastSlot = slot
             slot.SetApplicationBar = function(_, bar, barOpts)
                 validateBarOptions(w, barOpts)
                 w.lastBarOpts = barOpts

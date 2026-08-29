@@ -35,6 +35,10 @@ describe("Bar", function()
             assert.is_nil(include[1242974])
         end)
 
+        it("makes the slot click-through so drags reach the movable root", function()
+            assert.is_false(w.lastSlot.state.mouseEnabled)
+        end)
+
         it("anchors the stack count FontString centered inside the bar", function()
             assert.is_not_nil(w.lastCountFS)
             local p = w.lastCountFS.state.points[1]

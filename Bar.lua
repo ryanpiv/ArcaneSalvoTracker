@@ -148,8 +148,19 @@ local function ApplyApplicationBar(btn, bar)
     return false
 end
 
+-- Aura buttons take mouse input by default (the client wires them for
+-- tooltips), and the slot covers the whole bar — which would swallow
+-- the drag and right-click meant for the movable root underneath.
+-- The bar needs no tooltip, so make the slot fully click-through.
+local function MakeClickThrough(frame)
+    pcall(frame.EnableMouse, frame, false)
+    pcall(frame.SetMouseClickEnabled, frame, false)
+    pcall(frame.SetMouseMotionEnabled, frame, false)
+end
+
 local function InitSalvoSlot(btn)
     btn:SetSize(db.width, db.height)
+    MakeClickThrough(btn)
 
     local bar = CreateFrame("StatusBar", nil, btn)
     bar:SetAllPoints(btn)
@@ -237,6 +248,8 @@ function ns.BuildContainer()
         slot:ClearAllPoints()
         slot:SetPoint("BOTTOMLEFT", root, "BOTTOMLEFT", 0, 0)
     end)
+    MakeClickThrough(slot)
+    MakeClickThrough(container)
     ApplySlotScale()
 
     -- Stacking order: client fill < preview < overlay (icon/label/ticks)
