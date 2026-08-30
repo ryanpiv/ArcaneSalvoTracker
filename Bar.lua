@@ -490,23 +490,41 @@ function ns.InitBar()
     labelFS = overlay:CreateFontString(nil, "OVERLAY")
     labelFS:SetText("Arcane Salvo")
 
-    root:SetScript("OnDragStart", function(self)
-        if db.locked or UnitAffectingCombat("player") then return end
-        self:StartMoving()
-    end)
-    root:SetScript("OnDragStop", function(self)
+    local function StopMove(self)
+        if not self.__moving then return end
+        self.__moving = false
         self:StopMovingOrSizing()
         -- Save the raw anchor exactly like the original; re-anchoring
         -- the frame here can snap it back mid-release.
         local p, _, rp, x, y = self:GetPoint()
         db.point = { p, rp, x, y }
         if ns.RefreshOptionControls then ns.RefreshOptionControls() end
+    end
+
+    root:SetScript("OnDragStart", function(self)
+        if db.locked or UnitAffectingCombat("player") then return end
+        self.__moving = true
+        self:StartMoving()
     end)
-    root:SetScript("OnMouseUp", function(_, button)
+    root:SetScript("OnDragStop", StopMove)
+
+    -- Belt-and-suspenders move: drag events have a movement threshold
+    -- and quirks on some setups, so also move on plain left mouse-down
+    -- (the frame starts following the cursor immediately).
+    root:SetScript("OnMouseDown", function(self, button)
+        if button == "LeftButton" and not db.locked
+            and not UnitAffectingCombat("player") then
+            self.__moving = true
+            self:StartMoving()
+        end
+    end)
+    root:SetScript("OnMouseUp", function(self, button)
+        StopMove(self)
         if button == "RightButton" and not InCombat() then
             ns.ToggleOptions()
         end
     end)
+    root:SetScript("OnHide", StopMove)
     root:SetScript("OnEnter", function()
         ns.hovering = true
         ns.UpdateVisibility()

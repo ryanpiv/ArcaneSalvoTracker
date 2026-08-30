@@ -142,7 +142,25 @@ describe("Bar", function()
             assert.is_true(root.state.movable)
         end)
 
+        it("moves on plain left mouse-down and saves on mouse-up", function()
+            root.scripts.OnMouseDown(root, "LeftButton")
+            assert.is_true(root.__moving)
+            root.state.points = {
+                { point = "CENTER", relTo = _G.UIParent, relPoint = "CENTER", x = 111, y = -222 },
+            }
+            root.scripts.OnMouseUp(root, "LeftButton")
+            assert.is_false(root.__moving)
+            assert.same({ "CENTER", "CENTER", 111, -222 }, ns.db.point)
+        end)
+
+        it("does not start moving while locked", function()
+            ns.db.locked = true
+            root.scripts.OnMouseDown(root, "LeftButton")
+            assert.is_not_true(root.__moving)
+        end)
+
         it("saves the raw anchor on drag stop, exactly like the original", function()
+            root.scripts.OnDragStart(root)
             root.state.points = {
                 { point = "TOPLEFT", relTo = _G.UIParent, relPoint = "TOPLEFT", x = 50, y = -60 },
             }
