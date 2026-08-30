@@ -396,10 +396,11 @@ function ns.UpdateMouse()
     local needMouse = movable
         or (db.hoverReveal and db.combatOnly and not inCombat)
     root:EnableMouse(needMouse)
-    -- While movable, sit above Blizzard's Cooldown Manager viewers
-    -- (and skins like Ayja's) so an overlapping viewer can't steal the
-    -- drag; drop back down once locked so we don't cover dialogs.
-    root:SetFrameStrata(movable and "DIALOG" or "HIGH")
+    -- Only while the options window is open, sit above Blizzard's
+    -- Cooldown Manager viewers (and skins like Ayja's) so an overlapping
+    -- viewer can't steal the drag. Kept at HIGH otherwise so the bar
+    -- never covers the map or other dialogs during normal play.
+    root:SetFrameStrata((movable and ns.optionsOpen) and "DIALOG" or "HIGH")
     if not movable then root:StopMovingOrSizing() end
 end
 

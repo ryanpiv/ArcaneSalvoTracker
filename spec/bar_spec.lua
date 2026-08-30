@@ -129,12 +129,15 @@ describe("Bar", function()
     end)
 
     describe("positioning", function()
-        it("rises to DIALOG while movable so overlapping CDM viewers cannot steal drags", function()
-            assert.equal("DIALOG", root.state.strata)
+        it("stays at HIGH strata during normal play so it never covers the map", function()
+            assert.equal("HIGH", root.state.strata)
         end)
 
-        it("drops back to HIGH strata once locked", function()
-            ns.db.locked = true
+        it("rises to DIALOG while the options window is open so CDM viewers cannot steal drags", function()
+            ns.optionsOpen = true
+            ns.UpdateMouse()
+            assert.equal("DIALOG", root.state.strata)
+            ns.optionsOpen = false
             ns.UpdateMouse()
             assert.equal("HIGH", root.state.strata)
         end)
