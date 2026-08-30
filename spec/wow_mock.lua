@@ -104,6 +104,9 @@ local function attachMethods(w, obj, name)
     end
     function obj:GetEffectiveScale() return self.state.effectiveScale or 1 end
     function obj:EnableMouse(v) self.state.mouseEnabled = v and true or false end
+    function obj:IsMouseEnabled() return self.state.mouseEnabled or false end
+    function obj:SetMovable(v) self.state.movable = v and true or false end
+    function obj:IsMovable() return self.state.movable or false end
 
     function obj:RegisterEvent(event)
         w.eventTargets[event] = w.eventTargets[event] or {}

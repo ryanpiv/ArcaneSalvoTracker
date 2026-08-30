@@ -387,16 +387,16 @@ function ns.UpdateVisibility()
     end
 end
 
+-- Verbatim port of the original's logic: mouse only out of combat and
+-- while movable (or for hover-reveal); click-through in combat.
 function ns.UpdateMouse()
     if not root then return end
-    if InCombat() then
-        -- Click-through in combat, always.
-        root:EnableMouse(false)
-        return
-    end
-    local wantMouse = (not db.locked) or ns.tempShow or ns.optionsOpen
-        or (db.combatOnly and db.hoverReveal)
-    root:EnableMouse(wantMouse)
+    local inCombat = UnitAffectingCombat("player")
+    local movable = (not db.locked or ns.tempShow or ns.optionsOpen) and not inCombat
+    local needMouse = movable
+        or (db.hoverReveal and db.combatOnly and not inCombat)
+    root:EnableMouse(needMouse)
+    if not movable then root:StopMovingOrSizing() end
 end
 
 --------------------------------------------------------------------
@@ -460,15 +460,19 @@ function ns.InitBar()
     if root then return end
     db = ns.db
 
+    -- Setup order and drag scripts are a verbatim port of the original
+    -- ArcaneSalvoBar's working pattern — deviations here have already
+    -- caused hard-to-diagnose drag failures once.
     root = CreateFrame("Frame", "ArcaneSalvoTrackerBar", UIParent)
     -- Above the default HUD strata: Blizzard's Cooldown Manager viewers
     -- are mouse-interactive across their whole region, and if one
     -- overlaps the bar it would swallow every drag aimed at it. Safe in
     -- combat because the bar goes fully click-through there anyway.
     root:SetFrameStrata("HIGH")
-    root:SetClampedToScreen(true)
     root:SetMovable(true)
+    root:EnableMouse(true)
     root:RegisterForDrag("LeftButton")
+    root:SetClampedToScreen(true)
     -- Extend the clickable area above the bar (where the marker numbers
     -- render). The original addon is easy to grab because its root is
     -- taller than its bar; this gives the same grab strip without
@@ -488,21 +492,15 @@ function ns.InitBar()
     labelFS:SetText("Arcane Salvo")
 
     root:SetScript("OnDragStart", function(self)
-        if not db.locked and not InCombat() then
-            self:StartMoving()
-        end
+        if db.locked or UnitAffectingCombat("player") then return end
+        self:StartMoving()
     end)
     root:SetScript("OnDragStop", function(self)
         self:StopMovingOrSizing()
-        -- Normalize to a CENTER anchor so the options window's X/Y
-        -- sliders always reflect the live position.
-        local scale = self:GetEffectiveScale() / UIParent:GetEffectiveScale()
-        local fx, fy = self:GetCenter()
-        local ux, uy = UIParent:GetCenter()
-        if fx and ux then
-            db.point = { "CENTER", "CENTER", fx * scale - ux, fy * scale - uy }
-        end
-        ns.Refresh()
+        -- Save the raw anchor exactly like the original; re-anchoring
+        -- the frame here can snap it back mid-release.
+        local p, _, rp, x, y = self:GetPoint()
+        db.point = { p, rp, x, y }
         if ns.RefreshOptionControls then ns.RefreshOptionControls() end
     end)
     root:SetScript("OnMouseUp", function(_, button)

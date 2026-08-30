@@ -281,6 +281,13 @@ SlashCmdList.ARCANESALVOTRACKER = function(msg)
             tostring(ns.barColorMode or "not built"),
             tostring(ns.IsRelevantSpec()),
             tostring(ns.db.locked))
+        local bar = _G["ArcaneSalvoTrackerBar"]
+        if bar then
+            ns.Print("Drag state: mouse=%s movable=%s shown=%s alpha=%.1f combat=%s",
+                tostring(bar:IsMouseEnabled()), tostring(bar:IsMovable()),
+                tostring(bar:IsShown()), bar:GetAlpha(),
+                tostring(UnitAffectingCombat("player")))
+        end
         if ns.errors and #ns.errors > 0 then
             for _, e in ipairs(ns.errors) do ns.Print("  error: " .. e) end
         else

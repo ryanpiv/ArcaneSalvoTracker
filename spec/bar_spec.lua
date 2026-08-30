@@ -137,10 +137,17 @@ describe("Bar", function()
             assert.same({ 0, 0, -16, 0 }, root.state.hitRectInsets)
         end)
 
-        it("normalizes the position to a CENTER anchor on drag stop", function()
-            root.state.centerX, root.state.centerY = 300, 100
+        it("is mouse-enabled and movable at build time", function()
+            assert.is_true(root.state.mouseEnabled)
+            assert.is_true(root.state.movable)
+        end)
+
+        it("saves the raw anchor on drag stop, exactly like the original", function()
+            root.state.points = {
+                { point = "TOPLEFT", relTo = _G.UIParent, relPoint = "TOPLEFT", x = 50, y = -60 },
+            }
             root.scripts.OnDragStop(root)
-            assert.same({ "CENTER", "CENTER", 300, 100 }, ns.db.point)
+            assert.same({ "TOPLEFT", "TOPLEFT", 50, -60 }, ns.db.point)
         end)
     end)
 
