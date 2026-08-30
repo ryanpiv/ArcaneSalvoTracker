@@ -276,6 +276,9 @@ SlashCmdList.ARCANESALVOTRACKER = function(msg)
         end
 
     elseif cmd == "status" then
+        local version = C_AddOns and C_AddOns.GetAddOnMetadata
+            and C_AddOns.GetAddOnMetadata(ADDON, "Version") or "dev"
+        ns.Print("Version %s loaded", tostring(version))
         ns.Print("Spell ID: %s | color mode: %s | spec ok: %s | locked: %s",
             tostring(ns.db.spellID or "unresolved (candidates: " .. table.concat(ns.SALVO_CANDIDATES, ", ") .. ")"),
             tostring(ns.barColorMode or "not built"),

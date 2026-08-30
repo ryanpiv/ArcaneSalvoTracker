@@ -19,7 +19,7 @@ read_globals = {
     "UnitIsUnit", "GetSpecialization", "GetSpecializationInfo",
 
     -- Namespaced APIs
-    "C_Timer", "C_Spell", "C_UnitAuras", "C_AuraContainerUtil",
+    "C_Timer", "C_Spell", "C_UnitAuras", "C_AuraContainerUtil", "C_AddOns",
 
     -- Libraries
     "LibStub",

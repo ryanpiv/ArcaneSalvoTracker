@@ -2,7 +2,7 @@
 ## Title: Arcane Salvo Tracker
 ## Notes: A configurable Arcane Salvo stack bar for Arcane Mages: stack count inside the bar, color change at the breakpoint and at max stacks, movable breakpoint marker, and a full graphical options window (/ast).
 ## Author: Ryan Piveteau
-## Version: 0.1.0
+## Version: 0.1.1
 ## SavedVariables: ArcaneSalvoTrackerDB
 ## IconTexture: Interface\Icons\inv12_ability_mage_arcanesalvo
 ## OptionalDeps: LibSharedMedia-3.0, ElvUI
