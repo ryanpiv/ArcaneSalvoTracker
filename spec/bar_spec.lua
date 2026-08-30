@@ -129,7 +129,13 @@ describe("Bar", function()
     end)
 
     describe("positioning", function()
-        it("sits above the default HUD strata so overlapping viewers cannot swallow drags", function()
+        it("rises to DIALOG while movable so overlapping CDM viewers cannot steal drags", function()
+            assert.equal("DIALOG", root.state.strata)
+        end)
+
+        it("drops back to HIGH strata once locked", function()
+            ns.db.locked = true
+            ns.UpdateMouse()
             assert.equal("HIGH", root.state.strata)
         end)
 
