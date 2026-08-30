@@ -133,8 +133,8 @@ describe("Bar", function()
             assert.equal("HIGH", root.state.strata)
         end)
 
-        it("extends the clickable area above the bar as a grab strip", function()
-            assert.same({ 0, 0, -16, 0 }, root.state.hitRectInsets)
+        it("never sets hit-rect insets (restricted in modern clients)", function()
+            assert.is_nil(root.state.hitRectInsets)
         end)
 
         it("is mouse-enabled and movable at build time", function()

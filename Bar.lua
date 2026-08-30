@@ -473,11 +473,10 @@ function ns.InitBar()
     root:EnableMouse(true)
     root:RegisterForDrag("LeftButton")
     root:SetClampedToScreen(true)
-    -- Extend the clickable area above the bar (where the marker numbers
-    -- render). The original addon is easy to grab because its root is
-    -- taller than its bar; this gives the same grab strip without
-    -- changing the layout.
-    root:SetHitRectInsets(0, 0, -16, 0)
+    -- NOTE: no SetHitRectInsets here, on purpose. Expanding hit rects
+    -- via negative insets is restricted in modern clients and can
+    -- invalidate the frame's mouse handling entirely; the reference
+    -- addon never touches hit rects.
 
     bg = root:CreateTexture(nil, "BACKGROUND")
     bg:SetAllPoints(root)
