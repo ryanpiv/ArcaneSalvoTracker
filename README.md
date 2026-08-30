@@ -33,7 +33,8 @@ at max stacks even mid-combat.
 Open with `/ast`. While the window is open, the bar shows an addon-drawn **preview** at a
 simulated stack count (slider-driven), since the real aura bar is empty out of combat.
 
-- **Size and position** — width, height, scale, lock, reset position
+- **Size and position** — width, height, scale, precise X/Y position sliders
+  (for when another HUD element overlaps the bar), lock, reset position
 - **Stacks** — hero tree presets (**Sunfury**: cap 25 / breakpoint 12, **Spellslinger**:
   cap 20 / breakpoint 15), breakpoint, max stacks, optional second marker
 - **Colors** — bar normal / at breakpoint / at max, background, stack text, marker ticks

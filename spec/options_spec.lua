@@ -43,6 +43,13 @@ describe("Options", function()
             assert.equal(400, ns.db.width)
         end)
 
+        it("position sliders write a CENTER-anchored point", function()
+            w.FindSliderByLabel("Position X (from screen center)"):SetValue(200)
+            assert.same({ "CENTER", "CENTER", 200, -180 }, ns.db.point)
+            w.FindSliderByLabel("Position Y (from screen center)"):SetValue(-50)
+            assert.same({ "CENTER", "CENTER", 200, -50 }, ns.db.point)
+        end)
+
         it("lock checkbox", function()
             local label = w.FindByText("Lock bar (drag with left mouse while unlocked)")
             assert.is_not_nil(label)

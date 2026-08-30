@@ -338,6 +338,28 @@ local function Build()
         function() return db.scale end,
         function(v) db.scale = v; Refresh() end, "%.2f")
 
+    -- Drag-free positioning, for when another HUD element (like the
+    -- Cooldown Manager) overlaps the bar and intercepts the mouse.
+    local function posGet(i)
+        return function()
+            local p = db.point
+            return (p[1] == "CENTER" and p[2] == "CENTER") and p[i] or 0
+        end
+    end
+    local function posSet(i)
+        return function(v)
+            local p = db.point
+            if p[1] ~= "CENTER" or p[2] ~= "CENTER" then
+                db.point = { "CENTER", "CENTER", 0, -180 }
+                p = db.point
+            end
+            p[i] = v
+            Refresh()
+        end
+    end
+    MakeSlider("Position X (from screen center)", -1200, 1200, 1, posGet(3), posSet(3))
+    MakeSlider("Position Y (from screen center)", -800, 800, 1, posGet(4), posSet(4))
+
     MakeCheck("Lock bar (drag with left mouse while unlocked)",
         function() return db.locked end,
         function(v) db.locked = v; ns.UpdateMouse() end)
@@ -498,5 +520,12 @@ function ns.ToggleOptions()
         frame:Hide()
     else
         frame:Show()
+    end
+end
+
+-- Lets Bar.lua sync the controls (e.g. X/Y sliders after a drag)
+function ns.RefreshOptionControls()
+    if frame and frame:IsShown() then
+        RefreshControls()
     end
 end

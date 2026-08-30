@@ -461,6 +461,11 @@ function ns.InitBar()
     db = ns.db
 
     root = CreateFrame("Frame", "ArcaneSalvoTrackerBar", UIParent)
+    -- Above the default HUD strata: Blizzard's Cooldown Manager viewers
+    -- are mouse-interactive across their whole region, and if one
+    -- overlaps the bar it would swallow every drag aimed at it. Safe in
+    -- combat because the bar goes fully click-through there anyway.
+    root:SetFrameStrata("HIGH")
     root:SetClampedToScreen(true)
     root:SetMovable(true)
     root:RegisterForDrag("LeftButton")
@@ -484,8 +489,16 @@ function ns.InitBar()
     end)
     root:SetScript("OnDragStop", function(self)
         self:StopMovingOrSizing()
-        local point, _, relPoint, x, y = self:GetPoint()
-        db.point = { point, relPoint, x, y }
+        -- Normalize to a CENTER anchor so the options window's X/Y
+        -- sliders always reflect the live position.
+        local scale = self:GetEffectiveScale() / UIParent:GetEffectiveScale()
+        local fx, fy = self:GetCenter()
+        local ux, uy = UIParent:GetCenter()
+        if fx and ux then
+            db.point = { "CENTER", "CENTER", fx * scale - ux, fy * scale - uy }
+        end
+        ns.Refresh()
+        if ns.RefreshOptionControls then ns.RefreshOptionControls() end
     end)
     root:SetScript("OnMouseUp", function(_, button)
         if button == "RightButton" and not InCombat() then

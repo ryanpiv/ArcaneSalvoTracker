@@ -128,6 +128,18 @@ describe("Bar", function()
         end)
     end)
 
+    describe("positioning", function()
+        it("sits above the default HUD strata so overlapping viewers cannot swallow drags", function()
+            assert.equal("HIGH", root.state.strata)
+        end)
+
+        it("normalizes the position to a CENTER anchor on drag stop", function()
+            root.state.centerX, root.state.centerY = 300, 100
+            root.scripts.OnDragStop(root)
+            assert.same({ "CENTER", "CENTER", 300, 100 }, ns.db.point)
+        end)
+    end)
+
     describe("visibility", function()
         it("hides on non-Arcane specs", function()
             w.specID = 63

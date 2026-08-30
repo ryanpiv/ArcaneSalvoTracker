@@ -95,6 +95,11 @@ local function attachMethods(w, obj, name)
 
     function obj:GetFrameLevel() return self.state.frameLevel end
     function obj:SetFrameLevel(level) self.state.frameLevel = level end
+    function obj:SetFrameStrata(strata) self.state.strata = strata end
+    function obj:GetCenter()
+        return self.state.centerX or 0, self.state.centerY or 0
+    end
+    function obj:GetEffectiveScale() return self.state.effectiveScale or 1 end
     function obj:EnableMouse(v) self.state.mouseEnabled = v and true or false end
 
     function obj:RegisterEvent(event)
