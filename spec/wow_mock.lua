@@ -96,6 +96,9 @@ local function attachMethods(w, obj, name)
     function obj:GetFrameLevel() return self.state.frameLevel end
     function obj:SetFrameLevel(level) self.state.frameLevel = level end
     function obj:SetFrameStrata(strata) self.state.strata = strata end
+    function obj:SetHitRectInsets(l, r, t, b)
+        self.state.hitRectInsets = { l, r, t, b }
+    end
     function obj:GetCenter()
         return self.state.centerX or 0, self.state.centerY or 0
     end

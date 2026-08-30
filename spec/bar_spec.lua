@@ -133,6 +133,10 @@ describe("Bar", function()
             assert.equal("HIGH", root.state.strata)
         end)
 
+        it("extends the clickable area above the bar as a grab strip", function()
+            assert.same({ 0, 0, -16, 0 }, root.state.hitRectInsets)
+        end)
+
         it("normalizes the position to a CENTER anchor on drag stop", function()
             root.state.centerX, root.state.centerY = 300, 100
             root.scripts.OnDragStop(root)

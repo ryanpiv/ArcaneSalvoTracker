@@ -469,6 +469,11 @@ function ns.InitBar()
     root:SetClampedToScreen(true)
     root:SetMovable(true)
     root:RegisterForDrag("LeftButton")
+    -- Extend the clickable area above the bar (where the marker numbers
+    -- render). The original addon is easy to grab because its root is
+    -- taller than its bar; this gives the same grab strip without
+    -- changing the layout.
+    root:SetHitRectInsets(0, 0, -16, 0)
 
     bg = root:CreateTexture(nil, "BACKGROUND")
     bg:SetAllPoints(root)
